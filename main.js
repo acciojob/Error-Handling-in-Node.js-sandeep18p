@@ -15,10 +15,14 @@ fs.readFile(filePath, 'utf8', (err, data) => {
   try {
     const jsonData = JSON.parse(data);
     if (
-      typeof jsonData.name === "undefined" ||
-      typeof jsonData.age === "undefined"
+      typeof jsonData.name === 'undefined' || 
+      typeof jsonData.age === 'undefined' ||
+      jsonData.name === null ||
+      jsonData.age === null ||
+      jsonData.name === '' ||
+      isNaN(jsonData.age)
     ) {
-      console.log("Missing required data in the JSON file.");
+      console.error('Invalid or missing required data in the JSON file.');
       return;
     }
   } catch (err) {

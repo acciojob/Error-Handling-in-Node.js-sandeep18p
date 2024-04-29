@@ -1,16 +1,24 @@
 const fs = require('fs');
 
-const file_path = process.argv[2];
+const filePath = process.argv[2];
 
-if (!file_path) {
-  console.error('Usage: node print.js <file_path>');
-  process.exit(1);
-}
-
-fs.readFile(file_path, 'utf8', (err, data) => {
+fs.readFile(filePath, 'utf8', (err, data) => {
   if (err) {
-    console.error(`Error: ${err.message}`);
-  } else {
-    console.log(data);
+    console.error(`Error reading file ${filePath}: ${err}`);
+    return;
+  }
+
+  try {
+    const jsonData = JSON.parse(data);
+    console.log('Successfully read JSON file:', jsonData);
+
+    if (!jsonData.requiredField) {
+      throw new Error('Missing required data in JSON file: requiredField');
+    }
+
+    
+
+  } catch (err) {
+    console.error('Error parsing JSON:', err.message);
   }
 });

@@ -1,37 +1,42 @@
-const fs = require("fs");
+const fs = require('fs');
 
-function readAndParseJSON(filePath) {
+const filePath = process.argv[2];
+if (!filePath) {
+  console.error('Usage: node print.js <file_path>');
+  process.exit(1);
+}
+
+fs.readFile(filePath, 'utf8', (err, data) => {
+  if (err) {
+    console.error(`Error reading file ${filePath}: ${err}`);
+    return;
+  }
+
   try {
-    const jsonData = fs.readFileSync(filePath, "utf8");
-    const parsedData = JSON.parse(jsonData);
-
+    const jsonData = JSON.parse(data);
     if (
-      typeof parsedData.name === "undefined" ||
-      typeof parsedData.age === "undefined"
+      typeof jsonData.name === 'undefined' || 
+      typeof jsonData.age === 'undefined' ||
+      jsonData.name === null ||
+      jsonData.age === null ||
+      jsonData.name === '' ||
+      isNaN(jsonData.age)
     ) {
-      console.log("Missing required data in the JSON file.");
+      console.error('Invalid or missing required data in the JSON file.');
       return;
     }
 
-    console.log(JSON.stringify(parsedData));
-  } catch (error) {
-    if (error instanceof SyntaxError) {
+
+         // Proceed with further processing if no errors
+         console.log(JSON.stringify(jsonData));
+
+  } catch (err) {
+    if (err instanceof SyntaxError) {
       console.log(
         "Invalid JSON file format. Please provide a valid JSON file."
       );
     } else {
-      console.log(`Error reading the file: ${error.message}`);
+      console.log(`Error reading the file: ${err.message}`);
     }
   }
-}
-
-if (require.main === module) {
-  const filePath = process.argv[2];
-  if (!filePath) {
-    console.log("Please provide a JSON file path.");
-    return;
-  }
-  readAndParseJSON(filePath);
-}
-
-module.exports = { readAndParseJSON };
+});

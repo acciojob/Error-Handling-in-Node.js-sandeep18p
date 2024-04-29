@@ -22,6 +22,12 @@ fs.readFile(filePath, 'utf8', (err, data) => {
       return;
     }
   } catch (err) {
-    console.error('Invalid JSON file format. Please provide a valid JSON file.');
+    if (err instanceof SyntaxError) {
+      console.log(
+        "Invalid JSON file format. Please provide a valid JSON file."
+      );
+    } else {
+      console.log(`Error reading the file: ${err.message}`);
+    }
   }
 });

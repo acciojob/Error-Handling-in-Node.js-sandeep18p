@@ -25,6 +25,12 @@ fs.readFile(filePath, 'utf8', (err, data) => {
       console.error('Invalid or missing required data in the JSON file.');
       return;
     }
+
+
+         // Proceed with further processing if no errors
+    console.log('Name:', jsonData.name);
+    console.log('Age:', jsonData.age);
+
   } catch (err) {
     if (err instanceof SyntaxError) {
       console.log(

@@ -1,6 +1,10 @@
 const fs = require('fs');
 
 const filePath = process.argv[2];
+if (!filePath) {
+  console.error('Usage: node print.js <file_path>');
+  process.exit(1);
+}
 
 fs.readFile(filePath, 'utf8', (err, data) => {
   if (err) {
@@ -10,15 +14,14 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
   try {
     const jsonData = JSON.parse(data);
-    console.log('Successfully read JSON file:', jsonData);
-
-    if (!jsonData.requiredField) {
-      throw new Error('Missing required data in JSON file: requiredField');
+    if (
+      typeof parsedData.name === "undefined" ||
+      typeof parsedData.age === "undefined"
+    ) {
+      console.log("Missing required data in the JSON file.");
+      return;
     }
-
-    
-
   } catch (err) {
-    console.error('Error parsing JSON:', err.message);
+    console.error('Invalid JSON file format. Please provide a valid JSON file.');
   }
 });
